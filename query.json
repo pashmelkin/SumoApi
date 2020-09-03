@@ -1,0 +1,14 @@
+{
+
+  "query": "| count _sourceCategory",
+
+  "from": "2020-09-01T12:00:00",
+
+  "to": "2020-09-01T19:05:00",
+
+  "timeZone": "IST",
+
+  "byReceiptTime": true
+
+}
+
