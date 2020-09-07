@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/pavel.shmueli/Projects/SumoApi/SumoApi/SumoApi.csproj": {}
+    "/Users/pavel.shmueli/Devel/SumoApi/SumoApi/SumoApi.csproj": {}
   },
   "projects": {
-    "/Users/pavel.shmueli/Projects/SumoApi/SumoApi/SumoApi.csproj": {
+    "/Users/pavel.shmueli/Devel/SumoApi/SumoApi/SumoApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/pavel.shmueli/Projects/SumoApi/SumoApi/SumoApi.csproj",
+        "projectUniqueName": "/Users/pavel.shmueli/Devel/SumoApi/SumoApi/SumoApi.csproj",
         "projectName": "SumoApi",
-        "projectPath": "/Users/pavel.shmueli/Projects/SumoApi/SumoApi/SumoApi.csproj",
+        "projectPath": "/Users/pavel.shmueli/Devel/SumoApi/SumoApi/SumoApi.csproj",
         "packagesPath": "/Users/pavel.shmueli/.nuget/packages/",
-        "outputPath": "/Users/pavel.shmueli/Projects/SumoApi/SumoApi/obj/",
+        "outputPath": "/Users/pavel.shmueli/Devel/SumoApi/SumoApi/obj/",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
@@ -38,6 +38,12 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.3, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
