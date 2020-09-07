@@ -1,0 +1,70 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/pavel.shmueli/Devel/SumoApi/SumoApi/DeploymentAPI.csproj": {}
+  },
+  "projects": {
+    "/Users/pavel.shmueli/Devel/SumoApi/SumoApi/DeploymentAPI.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/pavel.shmueli/Devel/SumoApi/SumoApi/DeploymentAPI.csproj",
+        "projectName": "DeploymentAPI",
+        "projectPath": "/Users/pavel.shmueli/Devel/SumoApi/SumoApi/DeploymentAPI.csproj",
+        "packagesPath": "/Users/pavel.shmueli/.nuget/packages/",
+        "outputPath": "/Users/pavel.shmueli/Devel/SumoApi/SumoApi/obj/",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "/Users/pavel.shmueli/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.101/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

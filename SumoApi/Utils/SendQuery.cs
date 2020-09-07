@@ -1,4 +1,4 @@
-﻿namespace SumoApi.Utils
+﻿namespace Deployment.Utils
 {
     public class SendQuery
     {

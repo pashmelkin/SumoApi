@@ -1,5 +1,5 @@
 ﻿using System;
-namespace SumoApi.Models
+namespace Deployment.Models
 {
     public interface ISumoAuth
     {

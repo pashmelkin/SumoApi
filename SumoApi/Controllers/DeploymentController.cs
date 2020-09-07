@@ -11,9 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using SumoApi.Models;
+using Deployment.Models;
 
-namespace SumoApi.Controllers
+namespace Deployment.Controllers
 {
     [ApiController]
     [Route("[controller]")]
