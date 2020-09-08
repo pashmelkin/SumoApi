@@ -46,9 +46,6 @@ namespace Deployment.Models
 
             string id = string.Empty;
             var baseAddresspost = "https://api.au.sumologic.com/api/v1/search/jobs/";
-            //string sumoAuth = config.GetSection("SumoAuth").Value;
-            // use Ioptions
-
 
             client.DefaultRequestHeaders.Add("Accept", "application/json");
 
