@@ -1,0 +1,25 @@
+﻿<Properties StartupConfiguration="{0254FFCC-5A8B-4D1E-B097-43E3D73D464B}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="SumoApi/Properties/launchSettings.json">
+    <Files>
+      <File FileName="SumoApi/Properties/launchSettings.json" Line="1" Column="1" />
+      <File FileName="SumoApi/Models/SumoQueryService.cs" />
+      <File FileName="SumoApi/Models/ISumoQueryService.cs" />
+      <File FileName="SumoApi/Program.cs" />
+      <File FileName="SumoApi/Utils/SendQuery.cs" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="SumoApi" expanded="True" selected="True" />
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.SumoApi PreferredExecutionTarget="/Applications/Safari.app" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>

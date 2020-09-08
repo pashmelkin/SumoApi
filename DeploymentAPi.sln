@@ -1,7 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SumoApi", "SumoApi\SumoApi.csproj", "{0254FFCC-5A8B-4D1E-B097-43E3D73D464B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeploymentAPI", "SumoApi\DeploymentAPI.csproj", "{0254FFCC-5A8B-4D1E-B097-43E3D73D464B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -16,3 +16,13 @@
 /Users/pavel.shmueli/Projects/SumoApi/SumoApi/obj/Debug/netcoreapp3.1/SumoApi.RazorTargetAssemblyInfo.cache
 /Users/pavel.shmueli/Projects/SumoApi/SumoApi/obj/Debug/netcoreapp3.1/SumoApi.dll
 /Users/pavel.shmueli/Projects/SumoApi/SumoApi/obj/Debug/netcoreapp3.1/SumoApi.pdb
+/Users/pavel.shmueli/Projects/SumoApi/SumoApi/bin/Debug/netcoreapp3.1/Newtonsoft.Json.dll
+/Users/pavel.shmueli/Projects/SumoApi/SumoApi/obj/Debug/netcoreapp3.1/SumoApi.csproj.CopyComplete
+/Users/pavel.shmueli/Devel/SumoApi/SumoApi/obj/Debug/netcoreapp3.1/SumoApi.csprojAssemblyReference.cache
+/Users/pavel.shmueli/Devel/SumoApi/SumoApi/obj/Debug/netcoreapp3.1/staticwebassets/SumoApi.StaticWebAssets.Manifest.cache
+/Users/pavel.shmueli/Devel/SumoApi/SumoApi/obj/Debug/netcoreapp3.1/staticwebassets/SumoApi.StaticWebAssets.xml
+/Users/pavel.shmueli/Devel/SumoApi/SumoApi/obj/Debug/netcoreapp3.1/SumoApi.MvcApplicationPartsAssemblyInfo.cache
+/Users/pavel.shmueli/Devel/SumoApi/SumoApi/obj/Debug/netcoreapp3.1/SumoApi.AssemblyInfoInputs.cache
+/Users/pavel.shmueli/Devel/SumoApi/SumoApi/obj/Debug/netcoreapp3.1/SumoApi.AssemblyInfo.cs
+/Users/pavel.shmueli/Devel/SumoApi/SumoApi/obj/Debug/netcoreapp3.1/SumoApi.dll
+/Users/pavel.shmueli/Devel/SumoApi/SumoApi/obj/Debug/netcoreapp3.1/SumoApi.pdb
