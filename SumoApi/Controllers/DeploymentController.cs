@@ -21,30 +21,23 @@ namespace Deployment.Controllers
     {
 
         private readonly ILogger<DeploymentController> _logger;
-        private readonly ISumoQueryService _sumoQueryService;
+        private readonly IDeploymentService _deploymentService;
         private readonly IConfiguration config;
         private readonly Uri baseAddress;
        
         private static HttpClient client;
 
         public DeploymentController(ILogger<DeploymentController> logger, IConfiguration iConfig,
-            ISumoQueryService sumoQueryService)
+            IDeploymentService deploymentService)
         {
             client = new HttpClient();
             _logger = logger;
-            _sumoQueryService = sumoQueryService;
+            _deploymentService = deploymentService;
             config = iConfig;
-            baseAddress = new Uri("https://api.au.sumologic.com/api/v1/search/jobs/");
-
-            var authToken = Encoding.ASCII.GetBytes($"{AccessId}:{AccessKey}");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
-                    Convert.ToBase64String(authToken));
-
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
 
         }
 
-      [HttpGet]
+        //[HttpGet]
         public async Task<string> GetRecords()
         {
             var address = new Uri("https://api.au.sumologic.com/api/v1/search/jobs/02253F48F19AD1A7/records?offset=0&limit=100");
@@ -76,53 +69,10 @@ namespace Deployment.Controllers
         }
 
 
-       //[HttpGet]
+       [HttpGet]
         public async Task<string> GetDeployment(string commitSha)
         {
-            var values = new Dictionary<string, string>
-            {
-                { "query", "_sourceCategory=\"/aws/release-prod\" and sme-web |" +
-                " json field=_raw \"detail.env\" as env | json field=_raw \"detail.commit_id\" as commitId | json field=_raw \"time\"" +
-                "| count by commitId, env, time" },
-                { "from", "2020-09-01T12:00:00" },
-                { "to", "2020-09-01T19:05:00" },
-                { "timeZone", "IST" }
-            };
-
-            string id = string.Empty;
-            var baseAddresspost = "https://api.au.sumologic.com/api/v1/search/jobs/";
-            //string sumoAuth = config.GetSection("SumoAuth").Value;
-            // use Ioptions
-
-
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
-
-
-            //var response = await client.PostAsync(baseAddresspost, values);
-            //
-            using (var request = new HttpRequestMessage(HttpMethod.Post, new Uri(baseAddresspost)))
-            {
-                var json = JsonConvert.SerializeObject(values);
-                using (var stringContent = new StringContent(json, Encoding.UTF8, "application/json"))
-                {
-                    request.Content = stringContent;
-
-                    using (var response = await client
-                        .SendAsync(request, HttpCompletionOption.ResponseHeadersRead)
-                        .ConfigureAwait(false))
-                    {
-                        response.EnsureSuccessStatusCode();
-                        string content = await response.Content.ReadAsStringAsync();
-                        dynamic stuff = JsonConvert.DeserializeObject(content);
-                        id = stuff.id;
-                       
-                    }
-                }
-            }
-
-
-
-            return (id);
+            return "1";
         }
     }
     

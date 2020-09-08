@@ -1,7 +1,9 @@
-﻿namespace Deployment.Models
+﻿using System.Threading.Tasks;
+
+namespace Deployment.Models
 {
     public interface ISumoQueryService
     {
-        public ulong GetListDeployments();
+        public Task<ulong> GetListDeployments();
     }
 }

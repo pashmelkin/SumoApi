@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SumoApi.Models;
-namespace SumoApi
+using Deployment.Models;
+namespace Deployment
 {
     public class Startup
     {
