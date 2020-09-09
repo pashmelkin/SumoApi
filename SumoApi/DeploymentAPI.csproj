@@ -5,11 +5,6 @@
   </PropertyGroup>
 
 
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'SumoApi' ">
-    <StartAction>Project</StartAction>
-    <LaunchUrl>query</LaunchUrl>
-    <ApplicationURL>http://localhost:5000</ApplicationURL>
-  </PropertyGroup>
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Utils\" />

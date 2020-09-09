@@ -1,7 +1,7 @@
 using System;
-using Deployment.Models;
+using System.Threading.Tasks;
 
-namespace DeploymentAPI.Controllers
+namespace Deployment.Models
 {
     public class DeploymentService : IDeploymentService
     {
@@ -14,9 +14,9 @@ namespace DeploymentAPI.Controllers
 
         }
 
-        public DateTime GetDeployment(string commitId)
+        public  async Task<DateTime> GetDeployment(string commitId)
         {
-            sumoService.GetListDeployments();
+            var res = await sumoService.GetListDeployments();
 
             return new DateTime();
         }

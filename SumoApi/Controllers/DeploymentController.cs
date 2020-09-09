@@ -1,39 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
+using Deployment.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Deployment.Models;
 
 namespace Deployment.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("deployment")]
     public class DeploymentController : ControllerBase
     {
 
-        private readonly ILogger<DeploymentController> _logger;
-        private readonly IDeploymentService _deploymentService;
-        private readonly IConfiguration config;
-        private readonly Uri baseAddress;
-       
+        private readonly IDeploymentService _deploymentService;       
         private static HttpClient client;
 
-        public DeploymentController(ILogger<DeploymentController> logger, IConfiguration iConfig,
-            IDeploymentService deploymentService)
+        public DeploymentController(IDeploymentService deploymentService)
         {
             client = new HttpClient();
-            _logger = logger;
             _deploymentService = deploymentService;
-            config = iConfig;
 
         }
 
@@ -72,7 +58,8 @@ namespace Deployment.Controllers
        [HttpGet]
         public async Task<string> GetDeployment(string commitSha)
         {
-            return "1";
+            var res = await _deploymentService.GetDeployment(commitSha);
+            return "hello";
         }
     }
     

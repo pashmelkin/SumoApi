@@ -1,14 +1,5 @@
 {
   "profiles": {
-    "SumoApi": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "query",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "http://localhost:5000"
-    },
     "DeploymentAPI": {
       "commandName": "Project",
       "launchBrowser": true,

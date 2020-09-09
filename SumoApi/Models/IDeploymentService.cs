@@ -1,8 +1,10 @@
 using System;
+using System.Threading.Tasks;
+
 namespace Deployment.Models
 {
     public interface IDeploymentService
     {
-        DateTime GetDeployment(string commitId);
+        Task<DateTime> GetDeployment(string commitId);
     }
 }
