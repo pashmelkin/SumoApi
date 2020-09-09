@@ -15,7 +15,7 @@ namespace Deployment.Models
         private readonly string baseAddress;
         private readonly IConfiguration Configuration;
         private readonly Client client;
-        private List<Tuple<string, string, DateTime>> Deployments;
+        private List<Tuple<object, object, object>> Deployments;
 
         public SumoQueryService(IConfiguration configuration)
         {
@@ -30,7 +30,7 @@ namespace Deployment.Models
             var authToken = Encoding.ASCII.GetBytes($"{sumoAuth.AccessID}:{sumoAuth.AccessKey}");
             client = new Client(authToken);
 
-            Deployments = new List<Tuple<string, string, DateTime>>();
+            Deployments = new List<Tuple<object, object, object>>();
         }
 
         public async Task<DateTime> GetAllDeployments(string searchJobId)
@@ -42,7 +42,7 @@ namespace Deployment.Models
             var records = result.records;
             foreach (var record in records) {
                 var elem = record.map;
-                Deployments.Add(new Tuple<string, string, DateTime>(elem.commitid, elem.env, elem.time));
+                Deployments.Add(new Tuple<object, object, object>(elem.commitid, elem.env, elem.time));
             }
 
             return new DateTime();
