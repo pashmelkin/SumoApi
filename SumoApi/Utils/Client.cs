@@ -20,7 +20,7 @@ namespace Deployment.Utils
             httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
         }
 
-        public async Task<string> Send(string baseAddress, Dictionary<string, string> contentToSend)
+        public async Task<string> PostRequest(string baseAddress, Dictionary<string, string> contentToSend)
         {
             var jobId = string.Empty;
             
@@ -41,6 +41,15 @@ namespace Deployment.Utils
                 }
             }
             return jobId;
+        }
+
+        public async Task<string> GetRequest(string baseAddress)
+        {
+            var response = await httpClient.GetAsync(baseAddress);
+
+            string content = await response.Content.ReadAsStringAsync();
+
+            return content;
         }
     }
 }

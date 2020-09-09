@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Deployment.Models
 {
     public interface ISumoQueryService
     {
-        public Task<ulong> GetListDeployments();
+        Task<string> SearchForDeployments();
+        Task<DateTime> GetAllDeployments(string searchJobId);
     }
 }

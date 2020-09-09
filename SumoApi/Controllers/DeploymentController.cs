@@ -38,23 +38,6 @@ namespace Deployment.Controllers
             // return await Task.Run(() => JsonObject.Parse(content));
         }
 
-       //[HttpGet]
-        public async Task<string> Get(string jobId)
-        {
-            //var uri = baseAddress + new Uri("jobs/123"); messages?offset=0&limit=10
-            var address = new Uri("https://api.au.sumologic.com/api/v1/search/jobs/02253F48F19AD1A7");
-            var response = await client.GetAsync(address);
-
-            //will throw an exception if not successful
-            response.EnsureSuccessStatusCode();
-
-            string content = await response.Content.ReadAsStringAsync();
-
-            return content;
-            // return await Task.Run(() => JsonObject.Parse(content));
-        }
-
-
        [HttpGet]
         public async Task<string> GetDeployment(string commitSha)
         {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Deployment.Utils;
@@ -28,7 +29,17 @@ namespace Deployment.Models
             client = new Client(authToken); 
             
         }
-        public async Task<ulong> GetListDeployments()
+
+        public async Task<DateTime> GetAllDeployments(string searchJobId)
+        {
+            var address = baseAddress + searchJobId + "/records?offset=0&limit=100";
+
+            var res = await client.GetRequest(address);
+
+            return new DateTime();
+        }
+
+        public async Task<string> SearchForDeployments()
         {
             var sumoQuery = new Dictionary<string, string>
             {
@@ -40,12 +51,9 @@ namespace Deployment.Models
                 { "timeZone", "IST" }
             };
 
-            var res = await client.Send(baseAddress, sumoQuery);
+            var jobId = await client.PostRequest(baseAddress, sumoQuery);
            
-
-
-
-            return (1);
+            return jobId;
         }
     }
 }

@@ -16,7 +16,8 @@ namespace Deployment.Models
 
         public  async Task<DateTime> GetDeployment(string commitId)
         {
-            var res = await sumoService.GetListDeployments();
+            var searchJobId = await sumoService.SearchForDeployments();
+            var res = await sumoService.GetAllDeployments(searchJobId);
 
             return new DateTime();
         }
