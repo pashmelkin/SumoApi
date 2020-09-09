@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Deployment.Utils;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace Deployment.Models
 {
@@ -14,6 +15,7 @@ namespace Deployment.Models
         private readonly string baseAddress;
         private readonly IConfiguration Configuration;
         private readonly Client client;
+        private List<Tuple<string, string, DateTime>> Deployments;
 
         public SumoQueryService(IConfiguration configuration)
         {
@@ -26,8 +28,9 @@ namespace Deployment.Models
 
 
             var authToken = Encoding.ASCII.GetBytes($"{sumoAuth.AccessID}:{sumoAuth.AccessKey}");
-            client = new Client(authToken); 
-            
+            client = new Client(authToken);
+
+            Deployments = new List<Tuple<string, string, DateTime>>();
         }
 
         public async Task<DateTime> GetAllDeployments(string searchJobId)
@@ -35,6 +38,12 @@ namespace Deployment.Models
             var address = baseAddress + searchJobId + "/records?offset=0&limit=100";
 
             var res = await client.GetRequest(address);
+            dynamic result = JsonConvert.DeserializeObject(res);
+            var records = result.records;
+            foreach (var record in records) {
+                var elem = record.map;
+                Deployments.Add(new Tuple<string, string, DateTime>(elem.commitid, elem.env, elem.time));
+            }
 
             return new DateTime();
         }
@@ -51,9 +60,10 @@ namespace Deployment.Models
                 { "timeZone", "IST" }
             };
 
-            var jobId = await client.PostRequest(baseAddress, sumoQuery);
-           
-            return jobId;
+            var content = await client.PostRequest(baseAddress, sumoQuery);
+            dynamic result = JsonConvert.DeserializeObject(content);
+
+            return result.id;
         }
     }
 }

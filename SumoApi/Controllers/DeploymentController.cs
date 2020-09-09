@@ -3,8 +3,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Deployment.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace Deployment.Controllers
 {

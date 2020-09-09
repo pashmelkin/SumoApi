@@ -22,7 +22,7 @@ namespace Deployment.Utils
 
         public async Task<string> PostRequest(string baseAddress, Dictionary<string, string> contentToSend)
         {
-            var jobId = string.Empty;
+            var content = string.Empty;
             
             using (var request = new HttpRequestMessage(HttpMethod.Post, new Uri(baseAddress)))
             {
@@ -34,13 +34,10 @@ namespace Deployment.Utils
                     .SendAsync(request, HttpCompletionOption.ResponseHeadersRead)
                     .ConfigureAwait(false))
                 {
-                    string content = await response.Content.ReadAsStringAsync();
-                    dynamic result = JsonConvert.DeserializeObject(content);
-                    jobId = result.id;
-
+                    content = await response.Content.ReadAsStringAsync();
                 }
             }
-            return jobId;
+            return content;
         }
 
         public async Task<string> GetRequest(string baseAddress)
