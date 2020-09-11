@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Deployment.Models;
@@ -36,10 +37,10 @@ namespace Deployment.Controllers
         }
 
        [HttpGet]
-        public async Task<string> GetDeployment(string commitSha)
+        public async Task<List<(string, DateTime)>> GetDeployment(string commitSha)
         {
             var res = await _deploymentService.GetDeployment(commitSha);
-            return "jep";
+            return res;
         }
     }
     

@@ -6,6 +6,6 @@ namespace Deployment.Models
 {
     public interface IDeploymentService
     {
-        Task<List<(string commitId, string env, string date)>> GetDeployment(string commitId);
+        Task<List<(string, DateTime)>>  GetDeployment(string commitId);
     }
 }
