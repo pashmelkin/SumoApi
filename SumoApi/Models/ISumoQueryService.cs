@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Deployment.Models
@@ -6,6 +6,7 @@ namespace Deployment.Models
     public interface ISumoQueryService
     {
         Task<string> SearchForDeployments();
-        Task<DateTime> GetAllDeployments(string searchJobId);
+        Task<List<(string commitId, string env, string date)>> GetAllDeployments(string searchJobId);
+        Task<bool> WaitJobIsReady(string searchJobId);
     }
 }

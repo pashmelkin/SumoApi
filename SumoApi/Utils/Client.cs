@@ -10,27 +10,24 @@ namespace Deployment.Utils
 {
     public class Client
     {
-        private HttpClient httpClient;
-        public Client(byte[] authToken)
+        private readonly HttpClient _client;
+        public Client(HttpClient client)
         {
-            httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
-                        Convert.ToBase64String(authToken));
+            _client = client;
 
-            httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
         }
 
         public async Task<string> PostRequest(string baseAddress, Dictionary<string, string> contentToSend)
         {
             var content = string.Empty;
-            
+
             using (var request = new HttpRequestMessage(HttpMethod.Post, new Uri(baseAddress)))
             {
                 var json = JsonConvert.SerializeObject(contentToSend);
                 using var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
                 request.Content = stringContent;
 
-                using (var response = await httpClient
+                using (var response = await _client
                     .SendAsync(request, HttpCompletionOption.ResponseHeadersRead)
                     .ConfigureAwait(false))
                 {
@@ -42,7 +39,7 @@ namespace Deployment.Utils
 
         public async Task<string> GetRequest(string baseAddress)
         {
-            var response = await httpClient.GetAsync(baseAddress);
+            var response = await _client.GetAsync(baseAddress);
 
             string content = await response.Content.ReadAsStringAsync();
 

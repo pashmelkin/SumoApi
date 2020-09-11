@@ -27,8 +27,7 @@ namespace Deployment.Controllers
             var address = new Uri("https://api.au.sumologic.com/api/v1/search/jobs/02253F48F19AD1A7/records?offset=0&limit=100");
             var response = await client.GetAsync(address);
 
-            //will throw an exception if not successful
-            //response.EnsureSuccessStatusCode();
+
 
             string content = await response.Content.ReadAsStringAsync();
 
@@ -40,7 +39,7 @@ namespace Deployment.Controllers
         public async Task<string> GetDeployment(string commitSha)
         {
             var res = await _deploymentService.GetDeployment(commitSha);
-            return "hello";
+            return "jep";
         }
     }
     

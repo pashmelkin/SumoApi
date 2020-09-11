@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Deployment.Models
@@ -14,12 +15,13 @@ namespace Deployment.Models
 
         }
 
-        public  async Task<DateTime> GetDeployment(string commitId)
+        public  async Task<List<(string commitId, string env, string date)>> GetDeployment(string commitSha)
         {
             var searchJobId = await sumoService.SearchForDeployments();
+            await sumoService.WaitJobIsReady(searchJobId);
             var res = await sumoService.GetAllDeployments(searchJobId);
 
-            return new DateTime();
+            return res;
         }
     }
 }

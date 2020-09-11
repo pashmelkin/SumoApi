@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Deployment.Utils;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace Deployment.Models
@@ -13,27 +12,30 @@ namespace Deployment.Models
 
        
         private readonly string baseAddress;
-        private readonly IConfiguration Configuration;
-        private readonly Client client;
-        private List<Tuple<object, object, object>> Deployments;
+        private readonly IHttpClientFactory _httpClientFactory;
+        public readonly Client client;
+        private List<(string commitId, string env, string date)> Deployments;
 
-        public SumoQueryService(IConfiguration configuration)
+        public SumoQueryService(IHttpClientFactory httpClientFactory)
         {
-
-            Configuration = configuration;
+            _httpClientFactory = httpClientFactory;
             baseAddress = "https://api.au.sumologic.com/api/v1/search/jobs/";
+            var sumoClient = _httpClientFactory.CreateClient("SumoClient");
+            client = new Client(sumoClient);
 
-            var sumoAuth = new SumoAuth();
-            Configuration.GetSection(SumoAuth.SumoAuthSection).Bind(sumoAuth);
-
-
-            var authToken = Encoding.ASCII.GetBytes($"{sumoAuth.AccessID}:{sumoAuth.AccessKey}");
-            client = new Client(authToken);
-
-            Deployments = new List<Tuple<object, object, object>>();
+            Deployments = new List<(string, string, string)>();
         }
 
-        public async Task<DateTime> GetAllDeployments(string searchJobId)
+        public async Task<bool> WaitJobIsReady(string searchJobId)
+        {
+            var address = baseAddress + searchJobId;
+           
+            var res = await client.GetRequest(address);
+
+            return true;
+        }
+
+        public async Task<List<(string commitId, string env, string date)>> GetAllDeployments(string searchJobId)
         {
             var address = baseAddress + searchJobId + "/records?offset=0&limit=100";
 
@@ -42,10 +44,13 @@ namespace Deployment.Models
             var records = result.records;
             foreach (var record in records) {
                 var elem = record.map;
-                Deployments.Add(new Tuple<object, object, object>(elem.commitid, elem.env, elem.time));
+                var sha = Convert.ToString(elem.commitid);
+                var env = Convert.ToString(elem.env);
+                var date = Convert.ToString(elem.time);
+               Deployments.Add((sha, env, date));
             }
 
-            return new DateTime();
+            return Deployments;
         }
 
         public async Task<string> SearchForDeployments()
