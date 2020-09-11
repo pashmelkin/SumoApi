@@ -5,11 +5,6 @@
   </PropertyGroup>
 
 
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'SumoApi' ">
-    <StartAction>Project</StartAction>
-    <LaunchUrl>query</LaunchUrl>
-    <ApplicationURL>https://localhost:5001;http://localhost:5000</ApplicationURL>
-  </PropertyGroup>
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Utils\" />
@@ -21,5 +16,7 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="Polly" Version="7.2.1" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="3.1.8" />
   </ItemGroup>
 </Project>

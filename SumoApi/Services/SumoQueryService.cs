@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+using Deployment.Utils;
 using Newtonsoft.Json;
 
 namespace Deployment.Models
@@ -12,29 +10,52 @@ namespace Deployment.Models
     public class SumoQueryService : ISumoQueryService
     {
 
-        private HttpClient client;
-        private readonly Uri baseAddress;
-        private readonly IConfiguration Configuration;
+       
+        private readonly string baseAddress;
+        private readonly IHttpClientFactory _httpClientFactory;
+        public readonly Client client;
+        private List<(string commitId, string env, string date)> Deployments;
 
-        public SumoQueryService(IConfiguration configuration)
+        public SumoQueryService(IHttpClientFactory httpClientFactory)
         {
+            _httpClientFactory = httpClientFactory;
+            baseAddress = "https://api.au.sumologic.com/api/v1/search/jobs/";
+            var sumoClient = _httpClientFactory.CreateClient("SumoClient");
+            client = new Client(sumoClient);
 
-            Configuration = configuration;
-            baseAddress = new Uri("https://api.au.sumologic.com/api/v1/search/jobs/");
-
-            var sumoAuth = new SumoAuth();
-            Configuration.GetSection(SumoAuth.SumoAuthSection).Bind(sumoAuth);
-
-
-            var authToken = Encoding.ASCII.GetBytes($"{sumoAuth.AccessID}:{sumoAuth.AccessKey}");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
-                    Convert.ToBase64String(authToken));
-
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
+            Deployments = new List<(string, string, string)>();
         }
-        public async Task<ulong> GetListDeployments()
+
+        public async Task<bool> WaitJobIsReady(string searchJobId)
         {
-            var values = new Dictionary<string, string>
+            var address = baseAddress + searchJobId;
+           
+            var res = await client.GetRequest(address);
+
+            return true;
+        }
+
+        public async Task<List<(string commitId, string env, string date)>> GetAllDeployments(string searchJobId)
+        {
+            var address = baseAddress + searchJobId + "/records?offset=0&limit=100";
+
+            var res = await client.GetRequest(address);
+            dynamic result = JsonConvert.DeserializeObject(res);
+            var records = result.records;
+            foreach (var record in records) {
+                var elem = record.map;
+                var sha = Convert.ToString(elem.commitid);
+                var env = Convert.ToString(elem.env);
+                var date = Convert.ToString(elem.time);
+               Deployments.Add((sha, env, date));
+            }
+
+            return Deployments;
+        }
+
+        public async Task<string> SearchForDeployments()
+        {
+            var sumoQuery = new Dictionary<string, string>
             {
                 { "query", "_sourceCategory=\"/aws/release-prod\" and sme-web |" +
                 " json field=_raw \"detail.env\" as env | json field=_raw \"detail.commit_id\" as commitId | json field=_raw \"time\"" +
@@ -44,40 +65,10 @@ namespace Deployment.Models
                 { "timeZone", "IST" }
             };
 
-            string id = string.Empty;
-            var baseAddresspost = "https://api.au.sumologic.com/api/v1/search/jobs/";
-            //string sumoAuth = config.GetSection("SumoAuth").Value;
-            // use Ioptions
+            var content = await client.PostRequest(baseAddress, sumoQuery);
+            dynamic result = JsonConvert.DeserializeObject(content);
 
-
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
-
-
-            //var response = await client.PostAsync(baseAddresspost, values);
-            //
-            using (var request = new HttpRequestMessage(HttpMethod.Post, new Uri(baseAddresspost)))
-            {
-                var json = JsonConvert.SerializeObject(values);
-                using (var stringContent = new StringContent(json, Encoding.UTF8, "application/json"))
-                {
-                    request.Content = stringContent;
-
-                    using (var response = await client
-                        .SendAsync(request, HttpCompletionOption.ResponseHeadersRead)
-                        .ConfigureAwait(false))
-                    {
-                        response.EnsureSuccessStatusCode();
-                        string content = await response.Content.ReadAsStringAsync();
-                        dynamic stuff = JsonConvert.DeserializeObject(content);
-                        id = stuff.id;
-
-                    }
-                }
-            }
-
-
-
-            return (1);
+            return result.id;
         }
     }
 }

@@ -1,7 +1,8 @@
 using System;
-using Deployment.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace DeploymentAPI.Controllers
+namespace Deployment.Models
 {
     public class DeploymentService : IDeploymentService
     {
@@ -14,11 +15,13 @@ namespace DeploymentAPI.Controllers
 
         }
 
-        public DateTime GetDeployment(string commitId)
+        public  async Task<List<(string commitId, string env, string date)>> GetDeployment(string commitSha)
         {
-            sumoService.GetListDeployments();
+            var searchJobId = await sumoService.SearchForDeployments();
+            await sumoService.WaitJobIsReady(searchJobId);
+            var res = await sumoService.GetAllDeployments(searchJobId);
 
-            return new DateTime();
+            return res;
         }
     }
 }
