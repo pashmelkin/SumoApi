@@ -16,7 +16,7 @@ namespace Deployment.Models
 
         }
 
-        public  async Task<List<(string, DateTime)>> GetDeployment(string commitSha)
+        public  async Task<List<DeploymentAPI.Models.Deployment>> GetDeployment(string commitSha)
         {
             var searchJobId = await sumoService.SearchForDeployments();
             await sumoService.WaitJobIsReady(searchJobId);
@@ -24,24 +24,29 @@ namespace Deployment.Models
 
 
             var prodDeps = deployments.FindAll(d => d.env.ToLower().Equals("prod") && d.commitId.ToLower().Equals(commitSha));
-            var results = new List<(string, DateTime)>();
+            var results = new List<DeploymentAPI.Models.Deployment>();
 
             if (prodDeps.Count() == 0)
             {
-                deployments.ForEach(d => results.Add((d.commitId, Convert.ToDateTime(d.date))));
+                deployments.ForEach(d => results.Add( new DeploymentAPI.Models.Deployment()
+                    {
+                        commitSha = d.commitId,
+                        date = Convert.ToDateTime(d.date)
+                    }
+                ));
                 return results;
                 
             }
-            else if (prodDeps.Count() == 1)
+
+            results.Add(new DeploymentAPI.Models.Deployment()
             {
-                 results.Add(
-                    (prodDeps.First().commitId,
-                    Convert.ToDateTime(prodDeps.First().date)));
+                commitSha = prodDeps.First().commitId,
+                date = Convert.ToDateTime(prodDeps.First().date)
+            });
+                 
                 return results;
                 
-            }
             
-            return new List<(string, DateTime)>() { ("Error, many deployments found", new DateTime())};
-        }
+           }
     }
 }
