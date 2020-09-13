@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Deployment.Models
@@ -15,13 +16,37 @@ namespace Deployment.Models
 
         }
 
-        public  async Task<List<(string commitId, string env, string date)>> GetDeployment(string commitSha)
+        public  async Task<List<DeploymentAPI.Models.Deployment>> GetDeployment(string commitSha)
         {
             var searchJobId = await sumoService.SearchForDeployments();
             await sumoService.WaitJobIsReady(searchJobId);
-            var res = await sumoService.GetAllDeployments(searchJobId);
+            var deployments = await sumoService.GetAllDeployments(searchJobId);
 
-            return res;
-        }
+
+            var prodDeps = deployments.FindAll(d => d.env.ToLower().Equals("prod") && d.commitId.ToLower().Equals(commitSha));
+            var results = new List<DeploymentAPI.Models.Deployment>();
+
+            if (prodDeps.Count() == 0)
+            {
+                deployments.ForEach(d => results.Add( new DeploymentAPI.Models.Deployment()
+                    {
+                        commitSha = d.commitId,
+                        date = Convert.ToDateTime(d.date)
+                    }
+                ));
+                return results;
+                
+            }
+
+            results.Add(new DeploymentAPI.Models.Deployment()
+            {
+                commitSha = prodDeps.First().commitId,
+                date = Convert.ToDateTime(prodDeps.First().date)
+            });
+                 
+                return results;
+                
+            
+           }
     }
 }

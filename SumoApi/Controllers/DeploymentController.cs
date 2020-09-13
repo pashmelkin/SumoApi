@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Deployment.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Deployment.Controllers
 {
@@ -39,7 +40,8 @@ namespace Deployment.Controllers
         public async Task<string> GetDeployment(string commitSha)
         {
             var res = await _deploymentService.GetDeployment(commitSha);
-            return "jep";
+            string output = JsonConvert.SerializeObject(res);
+            return output;
         }
     }
     
