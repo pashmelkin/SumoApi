@@ -37,7 +37,7 @@ namespace Deployment.Models
 
         public async Task<List<DeploymentDetails>> GetAllDeployments(string searchJobId)
         {
-            var address = baseAddress + searchJobId + "/records?offset=0&limit=100";
+            var address = baseAddress + searchJobId + "/records?offset=0&limit=200";
 
             var res = await client.GetRequest(address);
             dynamic result = JsonConvert.DeserializeObject(res);

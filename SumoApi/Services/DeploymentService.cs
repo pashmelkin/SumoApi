@@ -17,36 +17,34 @@ namespace Deployment.Service
 
         }
 
-        public async Task<List<DeploymentDetails>> GetDeployment(string commitSha)
+        public async Task<DeploymentDetails> GetDeployment(string commitSha)
         {
             var searchJobId = await sumoService.SearchForDeployments();
             await sumoService.WaitJobIsReady(searchJobId);
             var deployments = await sumoService.GetAllDeployments(searchJobId);
 
             deployments.Sort((x, y) => DateTime.Compare(x.date, y.date));
-            var prodDeps = deployments.FindAll(d => d.environment.ToLower().Equals("prod") && d.commitSha.ToLower().Equals(commitSha));
+            var prodDeps = deployments.FindAll(d => d.environment.ToLower().Equals("prod"));
+            var commitDeployment = prodDeps.Find(d => d.commitSha.ToLower().Equals(commitSha));
 
-            if (prodDeps.Count() > 0)
+            if (commitDeployment != null)
             {
-                return new List<DeploymentDetails>
+                return new DeploymentDetails
                 {
-                   new DeploymentDetails {
-                       commitSha = prodDeps.First().commitSha,
-                        date = Convert.ToDateTime(prodDeps.First().date)}
+                       commitSha = commitDeployment.commitSha,
+                        date = Convert.ToDateTime(commitDeployment.date),
+                        environment = "production"
                 };
             }
 
             var results = new List<DeploymentDetails>();
-            var devDeps = deployments.FindAll(d => d.environment.ToLower().Equals("dev") && d.commitSha.ToLower().Equals(commitSha));
-            var startDate = Convert.ToDateTime(devDeps.First().date);
+            var devDeps = deployments.Find(d => d.environment.ToLower().Equals("dev") && d.commitSha.ToLower().Equals(commitSha));
+            var startDate = Convert.ToDateTime(devDeps.date);
 
-            deployments.ForEach(d => results.Add( new DeploymentDetails()
-                {
-                    commitSha = d.commitSha,
-                    date = Convert.ToDateTime(d.date)
-                }
-            ));
-            return results;
+            var firstProdDeployment = prodDeps.Find(d => DateTime.Compare(d.date, startDate) > 0);
+
+            
+            return firstProdDeployment;
                                 
             
            }
