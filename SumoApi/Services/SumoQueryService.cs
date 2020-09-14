@@ -56,14 +56,16 @@ namespace Deployment.Models
 
         public async Task<string> SearchForDeployments()
         {
+            var now = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
+
             var sumoQuery = new Dictionary<string, string>
             {
                 { "query", "_sourceCategory=\"/aws/release-prod\" and sme-web |" +
                 " json field=_raw \"detail.env\" as env | json field=_raw \"detail.commit_id\" as commitId | json field=_raw \"time\"" +
                 "| count by commitId, env, time" },
                 { "from", "2020-09-08T12:00:00" },
-                { "to", "2020-09-11T19:05:00" },
-                { "timeZone", "IST" }
+                { "to", $"{now}" },
+                { "timeZone", "AET" }
             };
 
             var content = await client.PostRequest(baseAddress, sumoQuery);

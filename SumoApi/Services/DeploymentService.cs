@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Deployment.Models;
 
@@ -37,7 +35,6 @@ namespace Deployment.Service
                 };
             }
 
-            var results = new List<DeploymentDetails>();
             var devDeps = deployments.Find(d => d.environment.ToLower().Equals("dev") && d.commitSha.ToLower().Equals(commitSha));
             var startDate = Convert.ToDateTime(devDeps.date);
 
@@ -45,7 +42,6 @@ namespace Deployment.Service
 
             
             return firstProdDeployment;
-                                
             
            }
     }
