@@ -14,7 +14,7 @@ namespace Deployment.Models
         private readonly string baseAddress;
         private readonly IHttpClientFactory _httpClientFactory;
         public readonly Client client;
-        private List<(string commitId, string env, string date)> Deployments;
+        private List<DeploymentDetails> Deployments;
 
         public SumoQueryService(IHttpClientFactory httpClientFactory)
         {
@@ -23,7 +23,7 @@ namespace Deployment.Models
             var sumoClient = _httpClientFactory.CreateClient("SumoClient");
             client = new Client(sumoClient);
 
-            Deployments = new List<(string, string, string)>();
+            Deployments = new List<DeploymentDetails>();
         }
 
         public async Task<bool> WaitJobIsReady(string searchJobId)
@@ -35,19 +35,20 @@ namespace Deployment.Models
             return true;
         }
 
-        public async Task<List<(string commitId, string env, string date)>> GetAllDeployments(string searchJobId)
+        public async Task<List<DeploymentDetails>> GetAllDeployments(string searchJobId)
         {
-            var address = baseAddress + searchJobId + "/records?offset=0&limit=100";
+            var address = baseAddress + searchJobId + "/records?offset=0&limit=200";
 
             var res = await client.GetRequest(address);
             dynamic result = JsonConvert.DeserializeObject(res);
             var records = result.records;
             foreach (var record in records) {
                 var elem = record.map;
-                var sha = Convert.ToString(elem.commitid);
-                var env = Convert.ToString(elem.env);
-                var date = Convert.ToString(elem.time);
-               Deployments.Add((sha, env, date));
+                Deployments.Add(new DeploymentDetails() {
+                   commitSha = Convert.ToString(elem.commitid),
+                   environment = Convert.ToString(elem.env),
+                   date = Convert.ToDateTime(elem.time)
+               });
             }
 
             return Deployments;
@@ -55,14 +56,16 @@ namespace Deployment.Models
 
         public async Task<string> SearchForDeployments()
         {
+            var now = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
+
             var sumoQuery = new Dictionary<string, string>
             {
                 { "query", "_sourceCategory=\"/aws/release-prod\" and sme-web |" +
                 " json field=_raw \"detail.env\" as env | json field=_raw \"detail.commit_id\" as commitId | json field=_raw \"time\"" +
                 "| count by commitId, env, time" },
                 { "from", "2020-09-08T12:00:00" },
-                { "to", "2020-09-11T19:05:00" },
-                { "timeZone", "IST" }
+                { "to", $"{now}" },
+                { "timeZone", "AET" }
             };
 
             var content = await client.PostRequest(baseAddress, sumoQuery);
