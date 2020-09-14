@@ -14,7 +14,7 @@ namespace Deployment.Models
         private readonly string baseAddress;
         private readonly IHttpClientFactory _httpClientFactory;
         public readonly Client client;
-        private List<(string commitId, string env, string date)> Deployments;
+        private List<DeploymentDetails> Deployments;
 
         public SumoQueryService(IHttpClientFactory httpClientFactory)
         {
@@ -23,7 +23,7 @@ namespace Deployment.Models
             var sumoClient = _httpClientFactory.CreateClient("SumoClient");
             client = new Client(sumoClient);
 
-            Deployments = new List<(string, string, string)>();
+            Deployments = new List<DeploymentDetails>();
         }
 
         public async Task<bool> WaitJobIsReady(string searchJobId)
@@ -35,7 +35,7 @@ namespace Deployment.Models
             return true;
         }
 
-        public async Task<List<(string commitId, string env, string date)>> GetAllDeployments(string searchJobId)
+        public async Task<List<DeploymentDetails>> GetAllDeployments(string searchJobId)
         {
             var address = baseAddress + searchJobId + "/records?offset=0&limit=100";
 
@@ -44,10 +44,11 @@ namespace Deployment.Models
             var records = result.records;
             foreach (var record in records) {
                 var elem = record.map;
-                var sha = Convert.ToString(elem.commitid);
-                var env = Convert.ToString(elem.env);
-                var date = Convert.ToString(elem.time);
-               Deployments.Add((sha, env, date));
+                Deployments.Add(new DeploymentDetails() {
+                   commitSha = Convert.ToString(elem.commitid),
+                   environment = Convert.ToString(elem.env),
+                   date = Convert.ToDateTime(elem.time)
+               });
             }
 
             return Deployments;

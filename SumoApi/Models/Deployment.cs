@@ -1,9 +1,10 @@
 using System;
-namespace DeploymentAPI.Models
+namespace Deployment.Models
 {
-    public class Deployment
+    public class DeploymentDetails
     {
         public string commitSha;
         public DateTime date;
+        public string environment;
     }
 }

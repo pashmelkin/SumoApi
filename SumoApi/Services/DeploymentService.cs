@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Deployment.Models;
 
-namespace Deployment.Models
+namespace Deployment.Service
 {
     public class DeploymentService : IDeploymentService
     {
@@ -16,36 +17,37 @@ namespace Deployment.Models
 
         }
 
-        public  async Task<List<DeploymentAPI.Models.Deployment>> GetDeployment(string commitSha)
+        public async Task<List<DeploymentDetails>> GetDeployment(string commitSha)
         {
             var searchJobId = await sumoService.SearchForDeployments();
             await sumoService.WaitJobIsReady(searchJobId);
             var deployments = await sumoService.GetAllDeployments(searchJobId);
 
+            deployments.Sort((x, y) => DateTime.Compare(x.date, y.date));
+            var prodDeps = deployments.FindAll(d => d.environment.ToLower().Equals("prod") && d.commitSha.ToLower().Equals(commitSha));
 
-            var prodDeps = deployments.FindAll(d => d.env.ToLower().Equals("prod") && d.commitId.ToLower().Equals(commitSha));
-            var results = new List<DeploymentAPI.Models.Deployment>();
-
-            if (prodDeps.Count() == 0)
+            if (prodDeps.Count() > 0)
             {
-                deployments.ForEach(d => results.Add( new DeploymentAPI.Models.Deployment()
-                    {
-                        commitSha = d.commitId,
-                        date = Convert.ToDateTime(d.date)
-                    }
-                ));
-                return results;
-                
+                return new List<DeploymentDetails>
+                {
+                   new DeploymentDetails {
+                       commitSha = prodDeps.First().commitSha,
+                        date = Convert.ToDateTime(prodDeps.First().date)}
+                };
             }
 
-            results.Add(new DeploymentAPI.Models.Deployment()
-            {
-                commitSha = prodDeps.First().commitId,
-                date = Convert.ToDateTime(prodDeps.First().date)
-            });
-                 
-                return results;
-                
+            var results = new List<DeploymentDetails>();
+            var devDeps = deployments.FindAll(d => d.environment.ToLower().Equals("dev") && d.commitSha.ToLower().Equals(commitSha));
+            var startDate = Convert.ToDateTime(devDeps.First().date);
+
+            deployments.ForEach(d => results.Add( new DeploymentDetails()
+                {
+                    commitSha = d.commitSha,
+                    date = Convert.ToDateTime(d.date)
+                }
+            ));
+            return results;
+                                
             
            }
     }
