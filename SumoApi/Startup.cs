@@ -29,6 +29,7 @@ namespace Deployment
             services.AddControllers();
             services.AddScoped<ISumoQueryService, SumoQueryService>();
             services.AddScoped<IDeploymentService, DeploymentService>();
+            services.AddMemoryCache();
 
             ConfigureHttpClient(services);
        
@@ -84,6 +85,7 @@ namespace Deployment
             app.UseRouting();
 
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {

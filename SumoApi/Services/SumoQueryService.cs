@@ -37,7 +37,7 @@ namespace Deployment.Models
 
         public async Task<List<DeploymentDetails>> GetAllDeployments(string searchJobId)
         {
-            var address = baseAddress + searchJobId + "/records?offset=0&limit=200";
+            var address = baseAddress + searchJobId + "/records?offset=0&limit=250";
 
             var res = await client.GetRequest(address);
             dynamic result = JsonConvert.DeserializeObject(res);
@@ -56,15 +56,17 @@ namespace Deployment.Models
 
         public async Task<string> SearchForDeployments()
         {
-            var now = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
+            var now = DateTime.UtcNow;
+            var from = DateTime.UtcNow.AddMonths(-1);
 
             var sumoQuery = new Dictionary<string, string>
             {
                 { "query", "_sourceCategory=\"/aws/release-prod\" and sme-web |" +
-                " json field=_raw \"detail.env\" as env | json field=_raw \"detail.commit_id\" as commitId | json field=_raw \"time\"" +
+                " json field=_raw \"detail.env\" as env | where env = \"dev\" or env = \"prod\" |" +
+                " json field=_raw \"detail.commit_id\" as commitId | json field=_raw \"time\"" +
                 "| count by commitId, env, time" },
-                { "from", "2020-09-08T12:00:00" },
-                { "to", $"{now}" },
+                { "from", $"{from.ToString("yyyy-MM-ddTHH:mm:ssZ")}" },
+                { "to", $"{now.ToString("yyyy-MM-ddTHH:mm:ssZ")}" },
                 { "timeZone", "AET" }
             };
 
