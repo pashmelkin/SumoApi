@@ -64,7 +64,13 @@ namespace Deployment.Service
 
             var firstProdDeployment = prodDeps.Find(d => DateTime.Compare(d.date, startDate) > 0);
 
-
+            if (firstProdDeployment == null)
+                firstProdDeployment = new DeploymentDetails()
+                {
+                    commitSha = "not deployed yet",
+                    environment = "prod",
+                    date = DateTime.Today
+                };
             return firstProdDeployment;
 
         }
