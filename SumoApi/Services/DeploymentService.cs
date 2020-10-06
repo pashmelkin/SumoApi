@@ -20,8 +20,7 @@ namespace Deployment.Service
 
         public async Task<List<DeploymentDetails>> CacheTryGetValueSet()
         {
-            var cacheEntry = new List<DeploymentDetails>();
-
+            List<DeploymentDetails> cacheEntry;
             // Look for cache key.
             if (!_cache.TryGetValue(CacheKeys.Entry, out cacheEntry))
             {
@@ -41,6 +40,9 @@ namespace Deployment.Service
 
         public async Task<DeploymentDetails> GetDeployment(string commitSha)
         {
+            if (string.IsNullOrEmpty(commitSha))
+                return null;
+
             List<DeploymentDetails> deployments = await CacheTryGetValueSet();
 
             deployments.Sort((x, y) => DateTime.Compare(x.date, y.date));

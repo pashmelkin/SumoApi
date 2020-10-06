@@ -9,6 +9,9 @@
     <Folder Include="Models\" />
     <Folder Include="Utils\" />
     <Folder Include="Services\" />
+    <Folder Include="UnitTests\" />
+    <Folder Include="UnitTests\Services\" />
+    <Folder Include="UnitTests\Controllers\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Models\WeatherForecast.cs" />
@@ -20,5 +23,8 @@
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="3.1.8" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.1.8" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="3.1.8" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="Moq" Version="4.14.6" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
   </ItemGroup>
 </Project>
