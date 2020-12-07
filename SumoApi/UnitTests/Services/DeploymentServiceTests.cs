@@ -3,20 +3,20 @@ using Moq;
 using Deployment.Service;
 using Deployment.Models;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 
 namespace Deployment.UnitTests.Service
 {
     public class DeploymentService_Should
     {
         private readonly DeploymentService _deploymentService;
-        private readonly ISumoQueryService _sumoService;
-        private readonly IMemoryCache _cache;
 
         public DeploymentService_Should()
         {
             var mockSumoService = new Mock<ISumoQueryService>();
             var mockCache = new Mock<IMemoryCache>();
-            _deploymentService = new DeploymentService(mockSumoService.Object, mockCache.Object);
+            var configurationMock = new Mock<IConfiguration>();
+            _deploymentService = new DeploymentService(mockSumoService.Object, mockCache.Object, configurationMock.Object);
         }
 
         [Fact]

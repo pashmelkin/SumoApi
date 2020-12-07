@@ -54,15 +54,15 @@ namespace Deployment.Models
             return Deployments;
         }
 
-        public async Task<string> SearchForDeployments()
+        public async Task<string> SearchForDeployments(string product, string env)
         {
             var now = DateTime.UtcNow;
             var from = DateTime.UtcNow.AddMonths(-1);
 
             var sumoQuery = new Dictionary<string, string>
             {
-                { "query", "_sourceCategory=\"/aws/release-prod\" and sme-web |" +
-                " json field=_raw \"detail.env\" as env | where env = \"dev\" or env = \"prod\" |" +
+                { "query", $"_sourceCategory=\"/aws/release-{env}\" and {product} |" +
+                $" json field=_raw \"detail.env\" as env | where env = \"{env}\" |" +
                 " json field=_raw \"detail.commit_id\" as commitId | json field=_raw \"time\"" +
                 "| count by commitId, env, time" },
                 { "from", $"{from.ToString("yyyy-MM-ddTHH:mm:ssZ")}" },
