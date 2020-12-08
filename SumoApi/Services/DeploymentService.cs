@@ -49,8 +49,7 @@ namespace Deployment.Service
                 return null;
 
             List<DeploymentDetails> deployments = await CacheTryGetValueSet();
-
-            deployments.Sort((x, y) => DateTime.Compare(x.date, y.date));
+            deployments.Sort((x, y) => Nullable.Compare(x.date, y.date));
             var prodDeps = deployments.FindAll(d => d.environment.LowCase().Equals(_prodDetails.Environment.LowCase()));
             var commitDeployment = prodDeps.Find(d => d.commitSha.LowCase().Equals(commitSha));
 
@@ -69,7 +68,7 @@ namespace Deployment.Service
                 return NotFoundDeployment();
             var startDate = Convert.ToDateTime(devDeps.date);
 
-            var firstProdDeployment = prodDeps.Find(d => DateTime.Compare(d.date, startDate) > 0);
+            var firstProdDeployment = prodDeps.Find(d => Nullable.Compare(d.date, startDate) > 0);
 
             if (firstProdDeployment == null)
                 firstProdDeployment = NotFoundDeployment();
@@ -83,7 +82,7 @@ namespace Deployment.Service
             {
                 commitSha = "not deployed yet",
                 environment = "prod",
-                date = DateTime.Today
+                date = null
             };
         }
 

@@ -11,12 +11,10 @@ namespace Deployment.Controllers
     public class DeploymentController : ControllerBase
     {
 
-        private readonly IDeploymentService _deploymentService;       
-        private static HttpClient client;
+        private readonly IDeploymentService _deploymentService;
 
         public DeploymentController(IDeploymentService deploymentService)
         {
-            client = new HttpClient();
             _deploymentService = deploymentService;
 
         }
